@@ -10,7 +10,7 @@ const bedrockClient = new BedrockRuntimeClient({
 
 export async function POST(request: NextRequest) {
   try {
-    const { message, conversationHistory } = await request.json();
+    const { message, conversationHistory, imageData } = await request.json();
 
     const conversationContext = conversationHistory
       .map(
@@ -23,6 +23,24 @@ export async function POST(request: NextRequest) {
       ? `${conversationContext}\n\nHuman: ${message}\n\nAssistant:`
       : `Human: ${message}\n\nAssistant:`;
 
+    const content: any[] = [
+      {
+        type: "text",
+        text: prompt,
+      },
+    ];
+
+    if (imageData) {
+      content.push({
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: imageData.type,
+          data: imageData.data,
+        },
+      });
+    }
+
     const command = new InvokeModelCommand({
       modelId: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
       contentType: "application/json",
@@ -33,12 +51,7 @@ export async function POST(request: NextRequest) {
         messages: [
           {
             role: "user",
-            content: [
-              {
-                type: "text",
-                text: prompt,
-              },
-            ],
+            content: content,
           },
         ],
       }),
