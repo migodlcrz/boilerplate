@@ -123,8 +123,8 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="flex flex-col bg-white shadow-md rounded-xl w-full max-w-4xl h-[80%]">
+      <div className="bg-white border-b px-6 py-4">
         <h1 className="text-2xl font-bold text-gray-900">AI Chat Assistant</h1>
         <p className="text-sm text-gray-600 mt-1">
           Powered by AWS Bedrock with Vision
@@ -134,9 +134,8 @@ export default function ChatInterface() {
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
-            <div className="text-6xl mb-4">🤖</div>
             <h3 className="text-lg font-medium mb-2">
-              Welcome to Claude 3.5 Sonnet!
+              Submit your medical records and get a summary
             </h3>
             <p className="text-sm">
               Start a conversation by typing a message or uploading an image
@@ -210,7 +209,6 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Form */}
       <div className="bg-white border-t border-gray-200 px-6 py-4">
         {selectedImage && (
           <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
