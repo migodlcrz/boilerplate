@@ -81,8 +81,65 @@ export default function ChatInterface() {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const formatAIResponse = (content: string) => {
+    return content.split("\n").map((line, index) => {
+      if (line.startsWith("# ")) {
+        return (
+          <div key={index} className="text-lg font-bold mb-3 mt-2">
+            {line.slice(2)}
+          </div>
+        );
+      }
+      if (line.startsWith("## ")) {
+        return (
+          <div key={index} className="text-base font-bold mb-2 mt-2">
+            {line.slice(3)}
+          </div>
+        );
+      }
+      if (line.startsWith("### ")) {
+        return (
+          <div key={index} className="text-sm font-bold mb-2 mt-1">
+            {line.slice(4)}
+          </div>
+        );
+      }
+      if (line.startsWith("• ") || line.startsWith("- ")) {
+        return (
+          <div key={index} className="ml-4 mb-1">
+            • {line.slice(2)}
+          </div>
+        );
+      }
+      if (line.includes("**")) {
+        const parts = line.split("**");
+        return (
+          <div key={index} className="mb-1">
+            {parts.map((part, i) =>
+              i % 2 === 1 ? (
+                <span key={i} className="font-semibold">
+                  {part}
+                </span>
+              ) : (
+                part
+              )
+            )}
+          </div>
+        );
+      }
+      if (line.trim() === "") {
+        return <div key={index} className="mb-2"></div>;
+      }
+      return (
+        <div key={index} className="mb-1">
+          {line}
+        </div>
+      );
+    });
+  };
+
   return (
-    <div className="flex flex-col bg-white shadow-md rounded-xl w-full max-w-4xl h-[80%]">
+    <div className="flex flex-col bg-white shadow-md w-full max-w-6xl h-[80%]">
       <div className="bg-white border-b px-6 py-4">
         <h1 className="text-2xl font-bold text-gray-900">AI Chat Assistant</h1>
         <p className="text-sm text-gray-600 mt-1">Powered by AWS Bedrock</p>
@@ -90,13 +147,10 @@ export default function ChatInterface() {
 
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {messages.length === 0 && (
-          <div className="text-center text-gray-500 mt-8">
+          <div className="text-center text-gray-400 mt-8">
             <h3 className="text-lg font-medium mb-2">
-              Submit your medical records and get a summary
-            </h3>
-            <p className="text-sm">
               Start a conversation by typing a message below.
-            </p>
+            </h3>
           </div>
         )}
 
@@ -114,7 +168,13 @@ export default function ChatInterface() {
                   : "bg-white border border-gray-200 text-gray-900"
               }`}
             >
-              <div className="text-sm">{message.content}</div>
+              <div className="text-sm">
+                <div className="whitespace-pre-wrap">
+                  {message.role === "assistant"
+                    ? formatAIResponse(message.content)
+                    : message.content}
+                </div>
+              </div>
               <div
                 className={`text-xs mt-1 ${
                   message.role === "user" ? "text-blue-100" : "text-gray-500"
