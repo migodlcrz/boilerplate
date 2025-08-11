@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "@types/pdf-parse": "^1.1.5"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.12"
   }
 }

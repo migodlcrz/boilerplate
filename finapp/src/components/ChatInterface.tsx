@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 
 interface Message {
   id: string;
@@ -139,10 +140,15 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col bg-white shadow-md w-full max-w-6xl h-[80%]">
-      <div className="bg-white border-b px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-900">AI Chat Assistant</h1>
-        <p className="text-sm text-gray-600 mt-1">Powered by AWS Bedrock</p>
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col bg-white shadow-md w-full max-w-6xl h-[80%]"
+    >
+      <div className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-800 border-b px-6 py-4">
+        <h1 className="text-2xl font-bold text-white">AI Chat Assistant</h1>
+        <p className="text-sm text-white mt-1">Powered by AWS Bedrock</p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
@@ -162,9 +168,9 @@ export default function ChatInterface() {
             }`}
           >
             <div
-              className={`max-w-[70%] rounded-lg px-4 py-2 ${
+              className={`max-w-[70%] shadow-md px-4 py-2 ${
                 message.role === "user"
-                  ? "bg-blue-600 text-white"
+                  ? "bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-800 text-white"
                   : "bg-white border border-gray-200 text-gray-900"
               }`}
             >
@@ -188,7 +194,7 @@ export default function ChatInterface() {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-gray-200 rounded-lg px-4 py-2">
+            <div className="bg-white border border-gray-200 px-4 py-2">
               <div className="flex items-center space-x-2">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -201,9 +207,7 @@ export default function ChatInterface() {
                     style={{ animationDelay: "0.2s" }}
                   ></div>
                 </div>
-                <span className="text-sm text-gray-500">
-                  Claude is thinking...
-                </span>
+                <span className="text-sm text-gray-500">AI is thinking...</span>
               </div>
             </div>
           </div>
@@ -212,25 +216,25 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="bg-white border-t border-gray-200 px-6 py-4">
+      <div className="bg-white border-t border-gray-200 p-4">
         <form onSubmit={handleSubmit} className="flex space-x-4">
           <input
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type your message here..."
-            className="flex-1 border text-black border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 border text-black border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={!inputMessage.trim() || isLoading}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-indigo-800 text-white hover:opacity-80 font-semibold px-6 py-2 transition-all hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Send
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }
